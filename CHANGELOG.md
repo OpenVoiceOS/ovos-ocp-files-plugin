@@ -1,20 +1,12 @@
 # Changelog
 
-## [0.13.1a2](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/0.13.1a2) (2024-09-11)
+## [0.13.2a1](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/0.13.2a1) (2025-06-08)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/V0.13.1a1...0.13.1a2)
-
-**Merged pull requests:**
-
-- rm workflows [\#5](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/5) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.13.1a1](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/V0.13.1a1) (2024-01-12)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/V0.13.0...V0.13.1a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/0.13.1...0.13.2a1)
 
 **Merged pull requests:**
 
-- update imports [\#4](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/4) ([NeonJarbas](https://github.com/NeonJarbas))
+- fix: compatibility with ovos-plugin-manager 1.X.X [\#7](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/7) ([JarbasAl](https://github.com/JarbasAl))
 
 
 
