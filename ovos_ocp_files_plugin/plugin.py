@@ -1,6 +1,7 @@
 import tempfile
 from os.path import basename, expanduser, isfile
 
+from ovos_utils import classproperty
 from ovos_plugin_manager.templates.ocp import OCPStreamExtractor
 from ovos_utils.ocp import TrackState, PlaybackType
 
@@ -12,8 +13,8 @@ class OCPFilesMetadataExtractor(OCPStreamExtractor):
         super().__init__(ocp_settings)
         self.settings = self.ocp_settings.get("files", {})
 
-    @property
-    def supported_seis(self):
+    @classproperty
+    def supported_seis(cls):
         """
         skills may return results requesting a specific extractor to be used
 
