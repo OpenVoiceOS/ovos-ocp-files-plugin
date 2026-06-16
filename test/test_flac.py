@@ -1,8 +1,4 @@
-from ward import (
-	raises,
-	test,
-	using,
-)
+import pytest
 
 from ovos_ocp_files_plugin import (
 	FLAC,
@@ -20,7 +16,7 @@ from ovos_ocp_files_plugin import (
 	FormatError,
 	ID3PictureType,
 )
-from tests.fixtures import (
+from test.fixtures import (
 	flac_0_duration,
 	flac_0_size_block,
 	flac_application_block,
@@ -48,12 +44,7 @@ from tests.fixtures import (
 )
 
 
-@test(
-	"FLACApplication",
-	tags=['unit', 'flac', 'FLACApplication'],
-)
-@using(flac_application_data=flac_application_data)
-def _(flac_application_data):
+def test_flacapplication(flac_application_data):
 	application_init = FLACApplication(
 		id='aiff',
 		data=b'FORM\x02\xe0\x9b\x08AIFF'
@@ -66,15 +57,7 @@ def _(flac_application_data):
 	assert repr(application_init) == repr(application_parse) == '<FLACApplication (aiff)>'
 
 
-@test(
-	"FLACCueSheetIndex",
-	tags=['unit', 'flac', 'FLACCueSheetIndex'],
-)
-@using(
-	flac_cuesheet_index_1=flac_cuesheet_index_1,
-	flac_cuesheet_index_2=flac_cuesheet_index_2,
-)
-def _(flac_cuesheet_index_1, flac_cuesheet_index_2):
+def test_flaccuesheetindex(flac_cuesheet_index_1, flac_cuesheet_index_2):
 	cuesheet_index_init = FLACCueSheetIndex(
 		number=1,
 		offset=0,
@@ -98,15 +81,7 @@ def _(flac_cuesheet_index_1, flac_cuesheet_index_2):
 	assert repr(cuesheet_index_init) == repr(cuesheet_index_parse) == "<FLACCueSheetIndex({'number': 2, 'offset': 588})>"
 
 
-@test(
-	"FLACCueSheetTrack",
-	tags=['unit', 'flac', 'FLACCueSheetTrack'],
-)
-@using(
-	flac_cuesheet_track_1=flac_cuesheet_track_1,
-	flac_cuesheet_track_2=flac_cuesheet_track_2,
-)
-def _(flac_cuesheet_track_1, flac_cuesheet_track_2):
+def test_flaccuesheettrack(flac_cuesheet_track_1, flac_cuesheet_track_2):
 	cuesheet_track_init = FLACCueSheetTrack(
 		track_number=1,
 		offset=0,
@@ -158,12 +133,7 @@ def _(flac_cuesheet_track_1, flac_cuesheet_track_2):
 	assert cuesheet_track_parse.pre_emphasis is True
 
 
-@test(
-	"FLACCueSheet",
-	tags=['unit', 'flac', 'FLACCueSheet'],
-)
-@using(flac_cuesheet_data=flac_cuesheet_data)
-def _(flac_cuesheet_data):
+def test_flaccuesheet(flac_cuesheet_data):
 	cuesheet_init = FLACCueSheet(
 		[
 			FLACCueSheetTrack(
@@ -228,11 +198,7 @@ def _(flac_cuesheet_data):
 	assert repr(cuesheet_init) == repr(cuesheet_parse) == '<FLACCueSheet (4 tracks)>'
 
 
-@test(
-	"FLACMetadataBlock",
-	tags=['unit', 'flac', 'FLACMetadataBlock'],
-)
-def _():
+def test_flacmetadatablock():
 	metadata_block = FLACMetadataBlock(
 		type=100,
 		data=b'\x00' * 10
@@ -243,12 +209,7 @@ def _():
 	assert repr(metadata_block) == '<FLACMetadataBlock [100] (10 bytes)>'
 
 
-@test(
-	"FLACPadding",
-	tags=['unit', 'flac', 'FLACPadding'],
-)
-@using(flac_padding_data=flac_padding_data)
-def _(flac_padding_data):
+def test_flacpadding(flac_padding_data):
 	padding_init = FLACPadding(size=10)
 	padding_parse = FLACPadding.parse(flac_padding_data)
 
@@ -256,12 +217,7 @@ def _(flac_padding_data):
 	assert repr(padding_init) == repr(padding_parse) == '<FLACPadding (10 bytes)>'
 
 
-@test(
-	"FLACPicture",
-	tags=['unit', 'flac', 'FLACPicture'],
-)
-@using(flac_picture_data=flac_picture_data)
-def _(flac_picture_data):
+def test_flacpicture(flac_picture_data):
 	flac_picture_init = FLACPicture(
 		type=ID3PictureType.COVER_FRONT,
 		mime_type='image/png',
@@ -277,12 +233,7 @@ def _(flac_picture_data):
 	assert flac_picture_init == flac_picture_parse
 
 
-@test(
-	"FLACSeekTable",
-	tags=['unit', 'flac', 'FLACSeekTable'],
-)
-@using(flac_seektable_data=flac_seektable_data)
-def _(flac_seektable_data):
+def test_flacseektable(flac_seektable_data):
 	seekpoints = [
 		FLACSeekPoint(
 			first_sample=first_sample,
@@ -304,12 +255,7 @@ def _(flac_seektable_data):
 	assert seektable_init.data == seektable_parse.data == seekpoints
 
 
-@test(
-	"FLACStreamInfo",
-	tags=['unit', 'flac', 'FLACStreamInfo'],
-)
-@using(flac_streaminfo_data=flac_streaminfo_data)
-def _(flac_streaminfo_data):
+def test_flacstreaminfo(flac_streaminfo_data):
 	flac_streaminfo_init = FLACStreamInfo(
 		start=None,
 		size=None,
@@ -329,12 +275,7 @@ def _(flac_streaminfo_data):
 	assert flac_streaminfo_init == flac_streaminfo_parse
 
 
-@test(
-	"FLACVorbisComments",
-	tags=['unit', 'flac', 'FLACVorbisComments'],
-)
-@using(flac_vorbis_comment_data=flac_vorbis_comment_data)
-def _(flac_vorbis_comment_data):
+def test_flacvorbiscomments(flac_vorbis_comment_data):
 	vorbis_comments = FLACVorbisComments.parse(flac_vorbis_comment_data)
 
 	assert vorbis_comments == FLACVorbisComments(
@@ -352,12 +293,7 @@ def _(flac_vorbis_comment_data):
 	)
 
 
-@test(
-	"Parse FLAC application block",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_application_block=flac_application_block)
-def _(flac_application_block):
+def test_parse_flac_application_block(flac_application_block):
 	application_block, _ = FLAC._parse_metadata_block(flac_application_block)
 
 	assert application_block == FLACApplication(
@@ -366,12 +302,7 @@ def _(flac_application_block):
 	)
 
 
-@test(
-	"Parse FLAC cuesheet block",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_cuesheet_block=flac_cuesheet_block)
-def _(flac_cuesheet_block):
+def test_parse_flac_cuesheet_block(flac_cuesheet_block):
 	cuesheet_block, _ = FLAC._parse_metadata_block(flac_cuesheet_block)
 
 	assert cuesheet_block == FLACCueSheet(
@@ -434,23 +365,13 @@ def _(flac_cuesheet_block):
 	)
 
 
-@test(
-	"Parse FLAC padding block",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_padding_block=flac_padding_block)
-def _(flac_padding_block):
+def test_parse_flac_padding_block(flac_padding_block):
 	padding_block, _ = FLAC._parse_metadata_block(flac_padding_block)
 
 	assert padding_block == FLACPadding(size=10)
 
 
-@test(
-	"Parse FLAC picture block",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_picture_block=flac_picture_block)
-def _(flac_picture_block):
+def test_parse_flac_picture_block(flac_picture_block):
 	picture_block, _ = FLAC._parse_metadata_block(flac_picture_block)
 
 	assert picture_block == FLACPicture(
@@ -465,12 +386,7 @@ def _(flac_picture_block):
 	)
 
 
-@test(
-	"Parse FLAC seektable block",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_seektable_block=flac_seektable_block)
-def _(flac_seektable_block):
+def test_parse_flac_seektable_block(flac_seektable_block):
 	seektable_block, _ = FLAC._parse_metadata_block(flac_seektable_block)
 
 	assert seektable_block == FLACSeekTable(
@@ -490,12 +406,7 @@ def _(flac_seektable_block):
 	)
 
 
-@test(
-	"Parse FLAC streaminfo block",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_streaminfo_block=flac_streaminfo_block)
-def _(flac_streaminfo_block):
+def test_parse_flac_streaminfo_block(flac_streaminfo_block):
 	streaminfo_block, _ = FLAC._parse_metadata_block(flac_streaminfo_block)
 
 	assert streaminfo_block == FLACStreamInfo(
@@ -514,12 +425,7 @@ def _(flac_streaminfo_block):
 	)
 
 
-@test(
-	"Parse FLAC vorbis comment block",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_vorbis_comment_block=flac_vorbis_comment_block)
-def _(flac_vorbis_comment_block):
+def test_parse_flac_vorbis_comment_block(flac_vorbis_comment_block):
 	vorbis_comment_block, _ = FLAC._parse_metadata_block(flac_vorbis_comment_block)
 
 	assert vorbis_comment_block == FLACVorbisComments(
@@ -537,34 +443,19 @@ def _(flac_vorbis_comment_block):
 	)
 
 
-@test(
-	"0-sized FLAC block type raises FormatError",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_0_size_block=flac_0_size_block)
-def _(flac_0_size_block):
-	with raises(FormatError) as ctx:
+def test_0_sized_flac_block_type_raises_formaterror(flac_0_size_block):
+	with pytest.raises(FormatError) as ctx:
 		FLAC._parse_metadata_block(flac_0_size_block)
-	assert str(ctx.raised) == "FLAC metadata block size must be greater than 0."
+	assert str(ctx.value) == "FLAC metadata block size must be greater than 0."
 
 
-@test(
-	"Invalid FLAC block type raises FormatError",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_invalid_block=flac_invalid_block)
-def _(flac_invalid_block):
-	with raises(FormatError) as ctx:
+def test_invalid_flac_block_type_raises_formaterror(flac_invalid_block):
+	with pytest.raises(FormatError) as ctx:
 		FLAC._parse_metadata_block(flac_invalid_block)
-	assert str(ctx.raised) == "127 is not a valid FLAC metadata block type."
+	assert str(ctx.value) == "127 is not a valid FLAC metadata block type."
 
 
-@test(
-	"Flac reserved block type is a FLACMetadataBlock",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_reserved_block=flac_reserved_block)
-def _(flac_reserved_block):
+def test_flac_reserved_block_type_is_a_flacmetadatablock(flac_reserved_block):
 	reserved_block, _ = FLAC._parse_metadata_block(flac_reserved_block)
 
 	assert reserved_block == FLACMetadataBlock(
@@ -573,118 +464,61 @@ def _(flac_reserved_block):
 	)
 
 
-@test(
-	"Ignore ID3v2 in FLAC",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_id3v2=flac_id3v2)
-def _(flac_id3v2):
+def test_ignore_id3v2_in_flac(flac_id3v2):
 	FLAC.parse(flac_id3v2)
 
 
-@test(
-	"0 duration FLAC",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_0_duration=flac_0_duration)
-def _(flac_0_duration):
+def test_0_duration_flac(flac_0_duration):
 	FLAC.parse(flac_0_duration)
 
 
-@test(
-	"Reserved FLAC metadata block type",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(
-	flac_reserved_block=flac_reserved_block,
-	flac_streaminfo_block=flac_streaminfo_block,
-)
-def _(
+def test_reserved_flac_metadata_block_type(
 	flac_reserved_block,
 	flac_streaminfo_block,
 ):
 	FLAC.parse(b'fLaC' + flac_streaminfo_block + b'\x8a' + flac_reserved_block[1:])
 
 
-@test(
-	"No FLAC header raises FormatError",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(null=null)
-def _(null):
-	with raises(FormatError) as ctx:
+def test_no_flac_header_raises_formaterror(null):
+	with pytest.raises(FormatError) as ctx:
 		FLAC.parse(null)
-	assert str(ctx.raised) == "Valid FLAC header not found."
+	assert str(ctx.value) == "Valid FLAC header not found."
 
 
-@test(
-	"FLAC streaminfo block not first raises FormatError",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_padding_block=flac_padding_block)
-def _(flac_padding_block):
-	with raises(FormatError) as ctx:
+def test_flac_streaminfo_block_not_first_raises_formaterror(flac_padding_block):
+	with pytest.raises(FormatError) as ctx:
 		FLAC.parse(b'fLaC' + flac_padding_block)
-	assert str(ctx.raised) == "FLAC streaminfo block must be first."
+	assert str(ctx.value) == "FLAC streaminfo block must be first."
 
 
-@test(
-	"Multiple FLAC cuesheet blocks raises FormatError",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(
-	flac_cuesheet_block=flac_cuesheet_block,
-	flac_streaminfo_block=flac_streaminfo_block,
-)
-def _(
+def test_multiple_flac_cuesheet_blocks_raises_formaterror(
 	flac_cuesheet_block,
 	flac_streaminfo_block,
 ):
-	with raises(FormatError) as ctx:
+	with pytest.raises(FormatError) as ctx:
 		FLAC.parse(b'fLaC' + flac_streaminfo_block + flac_cuesheet_block + flac_cuesheet_block)
-	assert str(ctx.raised) == "Multiple FLAC cuesheet blocks found."
+	assert str(ctx.value) == "Multiple FLAC cuesheet blocks found."
 
 
-@test(
-	"Multiple FLAC seektable blocks raises FormatError",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(
-	flac_seektable_block=flac_seektable_block,
-	flac_streaminfo_block=flac_streaminfo_block,
-)
-def _(
+def test_multiple_flac_seektable_blocks_raises_formaterror(
 	flac_seektable_block,
 	flac_streaminfo_block,
 ):
-	with raises(FormatError) as ctx:
+	with pytest.raises(FormatError) as ctx:
 		FLAC.parse(b'fLaC' + flac_streaminfo_block + flac_seektable_block + flac_seektable_block)
-	assert str(ctx.raised) == "Multiple FLAC seektable blocks found."
+	assert str(ctx.value) == "Multiple FLAC seektable blocks found."
 
 
-@test(
-	"Multiple FLAC streaminfo blocks raises FormatError",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(flac_streaminfo_block=flac_streaminfo_block)
-def _(flac_streaminfo_block):
-	with raises(FormatError) as ctx:
+def test_multiple_flac_streaminfo_blocks_raises_formaterror(flac_streaminfo_block):
+	with pytest.raises(FormatError) as ctx:
 		FLAC.parse(b'fLaC' + flac_streaminfo_block + flac_streaminfo_block)
-	assert str(ctx.raised) == "Multiple FLAC streaminfo blocks found."
+	assert str(ctx.value) == "Multiple FLAC streaminfo blocks found."
 
 
-@test(
-	"Multiple FLAC Vorbis comment blocks raises FormatError",
-	tags=['unit', 'flac', 'FLAC'],
-)
-@using(
-	flac_vorbis_comment_block=flac_vorbis_comment_block,
-	flac_streaminfo_block=flac_streaminfo_block,
-)
-def _(
+def test_multiple_flac_vorbis_comment_blocks_raises_formaterror(
 	flac_vorbis_comment_block,
 	flac_streaminfo_block,
 ):
-	with raises(FormatError) as ctx:
+	with pytest.raises(FormatError) as ctx:
 		FLAC.parse(b'fLaC' + flac_streaminfo_block + flac_vorbis_comment_block + flac_vorbis_comment_block)
-	assert str(ctx.raised) == "Multiple FLAC Vorbis comment blocks found."
+	assert str(ctx.value) == "Multiple FLAC Vorbis comment blocks found."
