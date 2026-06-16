@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.13.2a2](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/0.13.2a2) (2026-06-16)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/0.13.2a1...0.13.2a2)
+
+**Merged pull requests:**
+
+- chore: add missing shared CI workflows [\#9](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/9) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.13.2a1](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/0.13.2a1) (2025-06-08)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/0.13.1...0.13.2a1)
