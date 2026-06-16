@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovos-ocp-files-plugin"
+dynamic = ["version"]
+description = "metadata extractor from audio files"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "thebigmunch", email = "mail@thebigmunch.me"}
+]
+keywords = ["ovos", "ocp", "plugin"]
+dependencies = [
+    "attrs>=18.2",
+    "bidict~=0.0",
+    "bitstruct>=6.0,<9.0",
+    "more-itertools>=4.0,<9.0",
+    "pprintpp~=0.0",
+    "wrapt",
+    "ovos-utils>=0.1.0,<1.0.0",
+    "ovos-plugin-manager>=2.1.0,<3.0.0"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "pytest-timeout",
+]
+
+[project.urls]
+Homepage = "https://github.com/OpenVoiceOS/ovos-ocp-files-plugin"
+
+[project.entry-points."opm.ocp.extractor"]
+"ovos-ocp-files-plugin" = "ovos_ocp_files_plugin.plugin:OCPFilesMetadataExtractor"
+
+[tool.setuptools.dynamic]
+version = {attr = "ovos_ocp_files_plugin.version.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ovos_ocp_files_plugin*"]
+
+[tool.setuptools.package-data]
+ovos_ocp_files_plugin = [
+    "*.json",
+]

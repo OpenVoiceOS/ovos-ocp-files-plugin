@@ -2,7 +2,6 @@ from pathlib import Path
 
 from bidict import frozenbidict
 from ovos_ocp_files_plugin.tbm_utils import DataReader
-from ward import test
 
 from ovos_ocp_files_plugin.models import (
 	Format,
@@ -10,17 +9,13 @@ from ovos_ocp_files_plugin.models import (
 	StreamInfo,
 	Tags
 )
-from tests.utils import strip_repr
+from test.utils import strip_repr
 
 
 test_image = (Path(__file__).parent / 'image' / 'test.png').resolve()
 
 
-@test(
-	"Format",
-	tags=['unit', 'models', 'Format'],
-)
-def _():
+def test_format():
 	format_bytes = Format._load(test_image.read_bytes())
 	format_bytes_datareader = Format._load(DataReader(test_image.read_bytes()))
 	format_fileobj = Format._load(test_image.open('rb'))
@@ -41,11 +36,7 @@ def _():
 	assert repr(format_fileobj) == repr(format_fileobj_datareader)
 
 
-@test(
-	"Picture",
-	tags=['unit', 'models', 'Picture'],
-)
-def _():
+def test_picture():
 	picture = Picture(
 		_test='test',
 		height=16,
@@ -56,11 +47,7 @@ def _():
 	assert repr(picture) == "<Picture({'data': '96.00 B', 'height': 16, 'width': 16})>"
 
 
-@test(
-	"StreamInfo",
-	tags=['unit', 'models', 'StreamInfo'],
-)
-def _():
+def test_streaminfo():
 	stream_info = StreamInfo(
 		_start=0,
 		bitrate=320000,
@@ -72,11 +59,7 @@ def _():
 	assert strip_repr(stream_info) == "<StreamInfo({'bitrate': '320 Kbps', 'channels': 2, 'duration': '01:40', 'sample_rate': '44.1 KHz',})>"
 
 
-@test(
-	"Tags",
-	tags=['unit', 'models', 'Tags'],
-)
-def _():
+def test_tags():
 	test_tags = Tags(key1='value1', key2='value2')
 	test_tags.FIELD_MAP = frozenbidict({'artist': 'key1', 'title': 'key2'})
 

@@ -1,8 +1,4 @@
-from ward import (
-	raises,
-	test,
-	using,
-)
+import pytest
 
 from ovos_ocp_files_plugin import (
 	FormatError,
@@ -13,25 +9,17 @@ from ovos_ocp_files_plugin import (
 	ID3v2Picture,
 	UnsupportedFormat,
 )
-from tests.fixtures import (
+from test.fixtures import (
 	id3v22_picture,
 	id3v22_picture_data,
+	id3v22_picture_frame,
 	id3v24_picture,
 	id3v24_picture_data,
+	id3v24_picture_frame,
 )
 
 
-@test(
-	'ID3v2Picture',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2Picture'],
-)
-@using(
-	id3v22_picture=id3v22_picture,
-	id3v22_picture_data=id3v22_picture_data,
-	id3v24_picture=id3v24_picture,
-	id3v24_picture_data=id3v24_picture_data,
-)
-def _(
+def test_id3v2picture(
 	id3v22_picture,
 	id3v22_picture_data,
 	id3v24_picture,
@@ -64,11 +52,7 @@ def _(
 	assert id3v22_picture_init == id3v22_picture_parse
 
 
-@test(
-	'ID3v2FrameFlags',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2FrameFlags'],
-)
-def _():
+def test_id3v2frameflags():
 	id3v24_frame_flags_init = ID3v2FrameFlags(
 		alter_tag=False,
 		alter_file=False,
@@ -134,67 +118,47 @@ def _():
 	assert id3v23_frame_flags_init == id3v23_frame_flags_parse
 
 
-@test(
-	'Frame size <= 0 in ID3v2Frame raises FormatError',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2Frame'],
-)
-def _():
-	with raises(FormatError) as exc:
+def test_frame_size_less_than_or_equal_0_in_id3v2frame_raises_formaterror():
+	with pytest.raises(FormatError) as exc:
 		ID3v2Frame.parse(
 			b'TEST\x00\x00\x00\x00\x00\x00VALUE',
 			ID3Version.v24,
 			False,
 		)
-	assert str(exc.raised) == "ID3v2 frame size must be greater than 0."
+	assert str(exc.value) == "ID3v2 frame size must be greater than 0."
 
 
-@test(
-	'Unsupported ID3 version in ID3v2Frame raises ValueError',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2Frame'],
-)
-def _():
-	with raises(ValueError) as exc:
+def test_unsupported_id3_version_in_id3v2frame_raises_valueerror():
+	with pytest.raises(ValueError) as exc:
 		ID3v2Frame.parse(
 			b'TEST\x00\x00\x00\x05\x00\x00VALUE',
 			ID3Version.v11,
 			False,
 		)
-	assert str(exc.raised) == "Unsupported ID3 version: ID3Version.v11."
+	assert str(exc.value) == "Unsupported ID3 version: ID3Version.v11."
 
 
-@test(
-	'Encrypted ID3v2Frame raises UnsupportedFormat',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2Frame'],
-)
-def _():
-	with raises(UnsupportedFormat) as exc:
+def test_encrypted_id3v2frame_raises_unsupportedformat():
+	with pytest.raises(UnsupportedFormat) as exc:
 		ID3v2Frame.parse(
 			b'TEST\x00\x00\x00\x05\x00\x04VALUE',
 			ID3Version.v24,
 			False,
 		)
-	assert str(exc.raised) == "ID3v2 frame encryption is not supported."
+	assert str(exc.value) == "ID3v2 frame encryption is not supported."
 
 
-@test(
-	'Compressed ID3v2Frame without data length indicator raises FormatError',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2Frame'],
-)
-def _():
-	with raises(FormatError) as exc:
+def test_compressed_id3v2frame_without_data_length_indicator_raises_formaterror():
+	with pytest.raises(FormatError) as exc:
 		ID3v2Frame.parse(
 			b'TEST\x00\x00\x00\x05\x00\x08VALUE',
 			ID3Version.v24,
 			False,
 		)
-	assert str(exc.raised) == "ID3v2 frame compression flag set without data length indicator."
+	assert str(exc.value) == "ID3v2 frame compression flag set without data length indicator."
 
 
-@test(
-	'ID3v2Frame with compression',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2Frame'],
-)
-def _():
+def test_id3v2frame_with_compression():
 	assert ID3v2Frame.parse(
 		b'TEST\x00\x00\x00\x11\x00\x09\x00\x00\x00\x05x\x9c\x0bs\xf4\tu\x05\x00\x04\x8a\x01~',
 		ID3Version.v24,
@@ -206,11 +170,7 @@ def _():
 	)
 
 
-@test(
-	'ID3v2Frame with unsynchronization',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2Frame'],
-)
-def _():
+def test_id3v2frame_with_unsynchronization():
 	assert ID3v2Frame.parse(
 		b'TEST\x00\x00\x00\x07\x00\x02\xFF\x00\xFEVALUE',
 		ID3Version.v24,
@@ -222,11 +182,7 @@ def _():
 	)
 
 
-@test(
-	'ID3v2Frame',
-	tags=['unit', 'id3', 'id3v2', 'id3v2frames', 'ID3v2Frame'],
-)
-def _():
+def test_id3v2frame():
 	# v2.4
 	assert ID3v2Frame(
 		name='TEST',
