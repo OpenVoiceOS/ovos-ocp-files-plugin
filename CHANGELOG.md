@@ -1,20 +1,28 @@
 # Changelog
 
-## [0.13.1a2](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/0.13.1a2) (2024-09-11)
+## [0.13.2a3](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/0.13.2a3) (2026-07-31)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/V0.13.1a1...0.13.1a2)
-
-**Merged pull requests:**
-
-- rm workflows [\#5](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/5) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.13.1a1](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/V0.13.1a1) (2024-01-12)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/V0.13.0...V0.13.1a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/0.13.2a2...0.13.2a3)
 
 **Merged pull requests:**
 
-- update imports [\#4](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/4) ([NeonJarbas](https://github.com/NeonJarbas))
+- docs: rewrite README in Simplified Technical English [\#11](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/11) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.13.2a2](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/0.13.2a2) (2026-06-16)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/0.13.2a1...0.13.2a2)
+
+**Merged pull requests:**
+
+- chore: add missing shared CI workflows [\#9](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/9) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.13.2a1](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/tree/0.13.2a1) (2025-06-08)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/compare/0.13.1...0.13.2a1)
+
+**Merged pull requests:**
+
+- fix: compatibility with ovos-plugin-manager 1.X.X [\#7](https://github.com/OpenVoiceOS/ovos-ocp-files-plugin/pull/7) ([JarbasAl](https://github.com/JarbasAl))
 
 
 

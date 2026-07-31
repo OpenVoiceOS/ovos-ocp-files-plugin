@@ -1,11 +1,6 @@
 import struct
 
-from ward import (
-	each,
-	raises,
-	test,
-	using,
-)
+import pytest
 
 from ovos_ocp_files_plugin import (
 	FormatError,
@@ -26,7 +21,7 @@ from ovos_ocp_files_plugin import (
 	XingHeader,
 	XingToC,
 )
-from tests.fixtures import (
+from test.fixtures import (
 	flac_vorbis,
 	lame_header,
 	lame_replay_gain,
@@ -41,19 +36,10 @@ from tests.fixtures import (
 	xing_header_no_lame,
 	xing_toc,
 )
-from tests.utils import strip_repr
+from test.utils import strip_repr
 
 
-@test(
-	"LAMEReplayGain",
-	tags=['unit', 'mp3', 'lame', 'LAMEReplayGain'],
-)
-@using(
-	lame_replay_gain=lame_replay_gain,
-	lame_replay_gain_null=lame_replay_gain_null,
-	lame_replay_gain_negative=lame_replay_gain_negative,
-)
-def _(
+def test_lamereplaygain(
 	lame_replay_gain,
 	lame_replay_gain_null,
 	lame_replay_gain_negative,
@@ -119,62 +105,54 @@ def _(
 	assert replay_gain_parse.album_adjustment == replay_gain_init.album_adjustment == -0.0
 
 
-@test(
-	"LAMEEncodingFlags",
-	tags=['unit', 'mp3', 'lame', 'LAMEEncodingFlags'],
+@pytest.mark.parametrize(
+	"flags,expected",
+	list(zip(
+		[
+			LAMEEncodingFlags(
+				nogap_continuation=1,
+				nogap_continued=1,
+				nspsytune=1,
+				nssafejoint=1,
+			),
+			LAMEEncodingFlags(
+				nogap_continuation=True,
+				nogap_continued=True,
+				nspsytune=True,
+				nssafejoint=True,
+			),
+			LAMEEncodingFlags(
+				nogap_continuation=0,
+				nogap_continued=0,
+				nspsytune=0,
+				nssafejoint=0,
+			),
+			LAMEEncodingFlags(
+				nogap_continuation=False,
+				nogap_continued=False,
+				nspsytune=False,
+				nssafejoint=False,
+			),
+		],
+		[
+			True,
+			True,
+			False,
+			False,
+		],
+	))
 )
-def _(
-	flags=each(
-		LAMEEncodingFlags(
-			nogap_continuation=1,
-			nogap_continued=1,
-			nspsytune=1,
-			nssafejoint=1,
-		),
-		LAMEEncodingFlags(
-			nogap_continuation=True,
-			nogap_continued=True,
-			nspsytune=True,
-			nssafejoint=True,
-		),
-		LAMEEncodingFlags(
-			nogap_continuation=0,
-			nogap_continued=0,
-			nspsytune=0,
-			nssafejoint=0,
-		),
-		LAMEEncodingFlags(
-			nogap_continuation=False,
-			nogap_continued=False,
-			nspsytune=False,
-			nssafejoint=False,
-		),
-	),
-	expected=each(
-		True,
-		True,
-		False,
-		False,
-	)
-):
+def test_lameencodingflags(flags, expected):
 	assert all(
 		flag is expected
 		for flag in flags.values()
 	)
 
 
-@test(
-	"LAMEHeader",
-	tags=['unit', 'mp3', 'lame', 'LAMEHeader']
-)
-@using(
-	null=null,
-	lame_header=lame_header,
-)
-def _(null, lame_header):
-	with raises(FormatError) as exc:
+def test_lameheader(null, lame_header):
+	with pytest.raises(FormatError) as exc:
 		LAMEHeader.parse(null, 100)
-	assert str(exc.raised) == "Valid LAME header not found."
+	assert str(exc.value) == "Valid LAME header not found."
 
 	lame_header_parse = LAMEHeader.parse(lame_header, 100)
 	lame_header_init = LAMEHeader(
@@ -260,18 +238,10 @@ def _(null, lame_header):
 	)
 
 
-@test(
-	"XingHeader",
-	tags=['unit', 'mp3', 'xing', 'XingHeader'],
-)
-@using(
-	null=null,
-	xing_header_no_lame=xing_header_no_lame,
-)
-def _(null, xing_header_no_lame):
-	with raises(FormatError) as exc:
+def test_xingheader(null, xing_header_no_lame):
+	with pytest.raises(FormatError) as exc:
 		XingHeader.parse(null)
-	assert str(exc.raised) == "Valid Xing header not found."
+	assert str(exc.value) == "Valid Xing header not found."
 
 	xing_header_parse = XingHeader.parse(xing_header_no_lame)
 	xing_header_init = XingHeader(
@@ -290,19 +260,14 @@ def _(null, xing_header_no_lame):
 	assert xing_header_parse.toc == xing_header_init.toc == XingToC(bytearray(xing_header_no_lame[16:116]))
 
 
-@test(
-	"VBRIHeader",
-	tags=['unit', 'mp3', 'vbri', 'VBRIHeader'],
-)
-@using(vbri_header=vbri_header)
-def _(vbri_header):
-	with raises(FormatError) as exc:
+def test_vbriheader(vbri_header):
+	with pytest.raises(FormatError) as exc:
 		VBRIHeader.parse(vbri_header[4:])
-	assert str(exc.raised) == "Valid VBRI header not found."
+	assert str(exc.value) == "Valid VBRI header not found."
 
-	with raises(FormatError) as exc:
+	with pytest.raises(FormatError) as exc:
 		VBRIHeader.parse(vbri_header[:23] + b'\x01' + vbri_header[24:])
-	assert str(exc.raised) == "Invalid VBRI TOC entry size."
+	assert str(exc.value) == "Invalid VBRI TOC entry size."
 
 	toc_entries = []
 	i = 26
@@ -342,22 +307,14 @@ def _(vbri_header):
 	assert vbri_header_parse.version == vbri_header_init.version == 1
 
 
-@test(
-	"MPEGFrameHeader",
-	tags=['unit', 'mp3', 'MPEGFrameHeader'],
-)
-@using(
-	mpeg_frame=mpeg_frame,
-	xing_toc=xing_toc,
-)
-def _(mpeg_frame, xing_toc):
-	with raises(FormatError) as exc:
+def test_mpegframeheader(mpeg_frame, xing_toc):
+	with pytest.raises(FormatError) as exc:
 		MPEGFrameHeader.parse(mpeg_frame[2:])
-	assert str(exc.raised) == "Invalid MPEG frame sync."
+	assert str(exc.value) == "Invalid MPEG frame sync."
 
-	with raises(FormatError) as exc:
+	with pytest.raises(FormatError) as exc:
 		MPEGFrameHeader.parse(mpeg_frame[0:1] + b'\xEE' + mpeg_frame[2:])
-	assert str(exc.raised) == "Invalid MPEG audio frame."
+	assert str(exc.value) == "Invalid MPEG audio frame."
 
 	mpeg_frame_parse = MPEGFrameHeader.parse(mpeg_frame)
 	mpeg_frame_init = MPEGFrameHeader(
@@ -432,17 +389,7 @@ def _(mpeg_frame, xing_toc):
 	)
 
 
-@test(
-	"MP3StreamInfo.count_mpeg_frames",
-	tags=['unit', 'mp3', 'MP3StreamInfo', 'count_mpeg_frames'],
-)
-@using(
-	mp3_lame_vbr=mp3_lame_vbr,
-	mp3_cbr_2_frames=mp3_cbr_2_frames,
-	mp3_sync_branch=mp3_sync_branch,
-	flac_vorbis=flac_vorbis,
-)
-def _(
+def test_mp3streaminfo_count_mpeg_frames(
 	mp3_lame_vbr,
 	mp3_cbr_2_frames,
 	mp3_sync_branch,
@@ -454,17 +401,7 @@ def _(
 	assert MP3StreamInfo.count_mpeg_frames(flac_vorbis) == 0
 
 
-@test(
-	"MP3StreamInfo.find_mpeg_frames",
-	tags=['unit', 'mp3', 'MP3StreamInfo', 'find_mpeg_frames'],
-)
-@using(
-	mp3_lame_vbr=mp3_lame_vbr,
-	mp3_cbr_2_frames=mp3_cbr_2_frames,
-	mp3_sync_branch=mp3_sync_branch,
-	flac_vorbis=flac_vorbis,
-)
-def _(
+def test_mp3streaminfo_find_mpeg_frames(
 	mp3_lame_vbr,
 	mp3_cbr_2_frames,
 	mp3_sync_branch,
@@ -482,6 +419,6 @@ def _(
 	assert len(frames) == 4
 	assert frames[0]._xing is None
 
-	with raises(FormatError) as exc:
+	with pytest.raises(FormatError) as exc:
 		MP3StreamInfo.find_mpeg_frames(flac_vorbis)
-	assert str(exc.raised) == "No XING header and insufficient MPEG frames."
+	assert str(exc.value) == "No XING header and insufficient MPEG frames."
